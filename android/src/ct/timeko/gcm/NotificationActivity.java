@@ -3,8 +3,8 @@ package ct.timeko.gcm;
 import android.content.Intent;
 import android.app.Activity;
 import android.os.Bundle;
-import org.appcelerator.kroll.common.Log;
 
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.KrollDict;
 
@@ -17,26 +17,44 @@ public class NotificationActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        try {
+            Intent intent = getIntent();
+            HashMap<String, Object> data = (HashMap)intent.getSerializableExtra(TiGCMModule.NTF_KEY_DATA);
+            TiGCMModule module = TiGCMModule.getInstance();
+            
+            Log.d(TAG, " NotificationActivity 1-2");
 
-        Intent intent = getIntent();
-        HashMap<String, Object> data = (HashMap)intent.getSerializableExtra(TiGCMModule.NTF_KEY_DATA);
+            if(module != null) {
+                module.fireMessage(data, false);
+            } else {
+                KrollDict kdata = new KrollDict(data);
 
-        TiGCMModule module = TiGCMModule.getInstance();
-        TiApplication instance = TiApplication.getInstance();
+                TiApplication.getInstance().getAppProperties().setString(TiGCMModule.PROPERTY_PENDING_DATA, kdata.toString());
+                Log.d(TAG, "Saving data in props: " + kdata.toString());
+            }
+            Log.d(TAG, " NotificationActivity 1-3");
+        } catch (Exception e) {
+            Log.d(TAG, "Couldn't send fireMessage from NotificationActivity");
+        }
+        try {
+            if (TiApplication.getAppCurrentActivity() == null) {
+                TiApplication tiApp = TiApplication.getInstance();
+                String tiPackageName = tiApp.getPackageName();
+                String mainClassName = tiApp.getPackageManager().getLaunchIntentForPackage(tiPackageName).getComponent().getClassName();
 
-        if(module != null) {
-            module.fireMessage(data, false);
-        } else {
-            KrollDict kdata = new KrollDict(data);
+                Intent mainActivityIntent = new Intent();
+                mainActivityIntent.setClassName(tiPackageName, mainClassName);
+                mainActivityIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                mainActivityIntent.setAction(Intent.ACTION_MAIN);
+                mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            TiApplication.getInstance().getAppProperties().setString(TiGCMModule.PROPERTY_PENDING_DATA, kdata.toString());
-            Log.d(TAG, "Saving data in props: " + kdata.toString());
+                startActivity(mainActivityIntent);
+        	}
+        } catch (Exception e) {
+            Log.d(TAG, "Couldn't start intent from NotificationActivity");
         }
 
-        String pkg = instance.getApplicationContext().getPackageName();
-        Intent launcherIntent = instance.getApplicationContext().getPackageManager().getLaunchIntentForPackage(pkg);
-
-        startActivity(launcherIntent);
         finish();
     }
 }

@@ -216,33 +216,57 @@ public class TiGCMModule extends KrollModule
     }
 
     public void fireError(String error) {
-        Log.d(TAG, "Fire error callback");
-        if (errorCallback != null) {
-            KrollDict e = new KrollDict();
-            e.put(KEY_ERROR, error);
-            errorCallback.call(getKrollObject(), e);
-            Log.d(TAG, "onError was called");
+        try {
+            Log.d(TAG, "Fire error callback");
+            if (errorCallback != null) {
+                KrollDict e = new KrollDict();
+                e.put(KEY_ERROR, error);
+                errorCallback.call(getKrollObject(), e);
+                Log.d(TAG, "onError was called");
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Couldn't send fireError");
+            Log.d(TAG, "Couldn't send fireError");
+            Log.d(TAG, "Couldn't send fireError");
+            Log.d(TAG, "Couldn't send fireError");
+            Log.d(TAG, "Couldn't send fireError");
         }
     }
 
     public void fireRegister(String token) {
-        Log.d(TAG, "Fire register callback");
-        if(registerCallback != null) {
-            KrollDict data = new KrollDict();
-            data.put(KEY_DEVICE_TOKEN, token);
-            registerCallback.call(getKrollObject(), data);
-            Log.d(TAG, "onRegister was called");
+        try {
+            Log.d(TAG, "Fire register callback");
+            if(registerCallback != null) {
+                KrollDict data = new KrollDict();
+                data.put(KEY_DEVICE_TOKEN, token);
+                registerCallback.call(getKrollObject(), data);
+                Log.d(TAG, "onRegister was called");
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Couldn't send fireRegister");
+            Log.d(TAG, "Couldn't send fireRegister");
+            Log.d(TAG, "Couldn't send fireRegister");
+            Log.d(TAG, "Couldn't send fireRegister");
+            Log.d(TAG, "Couldn't send fireRegister");
         }
     }
 
     public void fireMessage(HashMap<String, Object> message, boolean appInForeground) {
-        Log.d(TAG, "Fire message callback");
-        if(messageCallback != null) {
-            HashMap<String, Object> push = new HashMap<String, Object>();
-            push.put("appInForeground", appInForeground);
-            push.put(KEY_DATA, message);
-            messageCallback.call(getKrollObject(), push);
-            Log.d(TAG, "onMessage was called");
+        try {
+            Log.d(TAG, "Fire message callback");
+            if(messageCallback != null) {
+                HashMap<String, Object> push = new HashMap<String, Object>();
+                push.put("appInForeground", appInForeground);
+                push.put(KEY_DATA, message);
+                messageCallback.call(getKrollObject(), push);
+                Log.d(TAG, "onMessage was called");
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Couldn't send fireMessage");
+            Log.d(TAG, "Couldn't send fireMessage");
+            Log.d(TAG, "Couldn't send fireMessage");
+            Log.d(TAG, "Couldn't send fireMessage");
+            Log.d(TAG, "Couldn't send fireMessage");
         }
     }
 

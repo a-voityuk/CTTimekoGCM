@@ -27,12 +27,20 @@ public class ListenerService extends GcmListenerService {
             }
         }
 
-        TiGCMModule module = TiGCMModule.getInstance();
-        if(module != null && !forceCreateNotification) {
-            if(KrollRuntime.isInitialized() && TiApplication.isCurrentActivityInForeground()) {
-                module.fireMessage(data, true);
-                return;
+        try {
+            TiGCMModule module = TiGCMModule.getInstance();
+            if(module != null && !forceCreateNotification) {
+                if(KrollRuntime.isInitialized() && TiApplication.isCurrentActivityInForeground()) {
+                    module.fireMessage(data, true);
+                    return;
+                }
             }
+        } catch (Exception e) {
+            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
+            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
+            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
+            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
+            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
         }
 
         NotificationPublisher.createNotification(this, data);

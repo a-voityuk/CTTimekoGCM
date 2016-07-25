@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 import org.appcelerator.titanium.util.TiRHelper;
 
@@ -25,11 +27,12 @@ public class NotificationPublisher extends BroadcastReceiver {
         int ntfId = id.getAndIncrement();
 
         Log.d(TAG, "Creating notification");
-
+        
         Intent ntfIntent = new Intent(context, NotificationActivity.class);
-        ntfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        ntfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        ntfIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         ntfIntent.putExtra(TiGCMModule.NTF_KEY_DATA, data);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, ntfId, ntfIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, ntfId, ntfIntent, 0);
 
         int appIcon = 0;
         boolean empty = true;
@@ -44,10 +47,12 @@ public class NotificationPublisher extends BroadcastReceiver {
                 Log.e(TAG, "Couldn't find drawable.appicon");
             }
         }
-        
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(appIcon)
                 .setAutoCancel(true)
+                .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
         
         int badge = 1;
@@ -100,9 +105,13 @@ public class NotificationPublisher extends BroadcastReceiver {
         if (!empty) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(ntfId, notificationBuilder.build());
-
-            Log.d(TAG, "badge = " + badge);
-            TiGCMModule.getInstance().updateBadgeCount(badge);
+            
+            try {
+                Log.d(TAG, "badge = " + badge);
+                TiGCMModule.getInstance().updateBadgeCount(badge);
+            } catch (Exception e) {
+                Log.d(TAG, "Couldn't set badge count");
+            }
         } else {
             Log.d(TAG, "Wont create empty notification.");
         }
