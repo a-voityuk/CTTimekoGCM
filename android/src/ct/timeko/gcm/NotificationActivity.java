@@ -20,20 +20,17 @@ public class NotificationActivity extends Activity {
         
         try {
             Intent intent = getIntent();
-            HashMap<String, Object> data = (HashMap)intent.getSerializableExtra(TiGCMModule.NTF_KEY_DATA);
-            TiGCMModule module = TiGCMModule.getInstance();
-            
-            Log.d(TAG, " NotificationActivity 1-2");
+            HashMap<String, Object> data = (HashMap)intent.getSerializableExtra(CttimekogcmModule.NTF_KEY_DATA);
+            CttimekogcmModule module = CttimekogcmModule.getInstance();
 
             if(module != null) {
                 module.fireMessage(data, false);
             } else {
                 KrollDict kdata = new KrollDict(data);
 
-                TiApplication.getInstance().getAppProperties().setString(TiGCMModule.PROPERTY_PENDING_DATA, kdata.toString());
+                TiApplication.getInstance().getAppProperties().setString(CttimekogcmModule.PROPERTY_PENDING_DATA, kdata.toString());
                 Log.d(TAG, "Saving data in props: " + kdata.toString());
             }
-            Log.d(TAG, " NotificationActivity 1-3");
         } catch (Exception e) {
             Log.d(TAG, "Couldn't send fireMessage from NotificationActivity");
         }

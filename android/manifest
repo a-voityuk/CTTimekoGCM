@@ -2,18 +2,17 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0.0
-apiversion: 2
-architectures: armeabi armeabi-v7a x86
-description: Titanium Android Notifications module
-author: Alfred Eriksson
-license: The MIT License (MIT)
-copyright: Copyright (c) 2016 by Hyperlab AB
+version: 2.0.5
+apiversion: 3
+architectures: armeabi-v7a x86
+description: cttimekogcm
+author: Alexander Voityuk
+license: Specify your license
+copyright: Copyright (c) 2017 by Your Company
 
 # these should not be edited
-name: CTTimekoGCM
+name: cttimekogcm
 moduleid: ct.timeko.gcm
-guid: d4f8033d-0355-408b-b4ea-e8f44fb8cf39
+guid: 962be641-2879-451c-be91-d27b313133f9
 platform: android
-minsdk: 4.1.0.GA
-respackage: com.google.android.gms
+minsdk: 6.0.2.GA

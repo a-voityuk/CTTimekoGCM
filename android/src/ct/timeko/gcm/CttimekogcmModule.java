@@ -8,12 +8,14 @@
  */
 package ct.timeko.gcm;
 
-import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
-import org.appcelerator.kroll.KrollModule;
+import org.appcelerator.kroll.common.Log;
+import org.appcelerator.kroll.common.TiConfig;
+
+import org.appcelerator.titanium.TiApplication;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -22,8 +24,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+//import com.google.android.gms.common.ConnectionResult;
+//import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -33,10 +35,9 @@ import java.util.HashMap;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 
-@Kroll.module(name="CTTimekoGCM", id="ct.timeko.gcm")
-public class TiGCMModule extends KrollModule
+@Kroll.module(name="Cttimekogcm", id="ct.timeko.gcm")
+public class CttimekogcmModule extends KrollModule
 {
-    private static final String TAG = "TiGCMModule";
 
     private static final String KEY_DEVICE_TOKEN = "token";
     private static final String KEY_DATA = "data";
@@ -68,32 +69,40 @@ public class TiGCMModule extends KrollModule
 
     private static String launchData = null;
 
-    private static TiGCMModule instance = null;
-
-    public static TiGCMModule getInstance() {
-        return instance;
-    }
+    private static CttimekogcmModule instance = null;
 
     public String gcmSenderId = null;
 
-    public TiGCMModule()
-    {
-        super();
+	// Standard Debugging variables
+	private static final String TAG = "CttimekogcmModule";
+	private static final boolean DBG = TiConfig.LOGD;
+
+	// You can define constants with @Kroll.constant, for example:
+	// @Kroll.constant public static final String EXTERNAL_NAME = value;
+
+	public CttimekogcmModule() {
+		super();
 
         messageCallback = null;
         registerCallback = null;
         errorCallback = null;
 
         instance = this;
+	}
+
+    public static CttimekogcmModule getInstance() {
+        return instance;
     }
 
-    @Kroll.onAppCreate
-    public static void onAppCreate(TiApplication app)
-    {
+	@Kroll.onAppCreate
+	public static void onAppCreate(TiApplication app)
+	{
+		Log.d(TAG, "inside onAppCreate");
+		
         if(!app.getAppProperties().hasProperty(PROPERTY_NOTIFICATION_COUNTER)) {
             app.getAppProperties().setInt(PROPERTY_NOTIFICATION_COUNTER, 0);
         }
-    }	
+	}	
     
     /**
 	 * Set application badge
@@ -107,9 +116,7 @@ public class TiGCMModule extends KrollModule
 
     public void updateBadgeCount(int badgeCount) {
         Log.d(TAG, "updateBadgeCount: " + badgeCount);
-        Log.d(TAG, "updateBadgeCount: " + badgeCount);
-        Log.d(TAG, "updateBadgeCount: " + badgeCount);
-        
+
 	    Activity currentActivity = TiApplication.getInstance().getCurrentActivity();
         ShortcutBadger.applyCount(currentActivity, badgeCount);
     }
@@ -170,14 +177,19 @@ public class TiGCMModule extends KrollModule
                 }
             }
         }
-
-        if (checkPlayServices(TiApplication.getAppCurrentActivity())) {
+        
+        try {
             Intent intent = new Intent(TiApplication.getInstance().getApplicationContext(), RegistrationIntentService.class);
             TiApplication.getInstance().startService(intent);
+        } catch (Exception e) {
+            Log.d(TAG, "Couldn't send Intent");
         }
+        
+        //if (checkPlayServices(TiApplication.getAppCurrentActivity())) {
+        //}
     }
 
-    private boolean checkPlayServices(Activity activity) {
+    /*private boolean checkPlayServices(Activity activity) {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(TiApplication.getInstance().getApplicationContext());
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
@@ -189,7 +201,7 @@ public class TiGCMModule extends KrollModule
             return false;
         }
         return true;
-    }
+    }*/
 
     public static HashMap<String, Object> stringToHashMap(String source) {
         JSONObject jsonData;
@@ -226,10 +238,6 @@ public class TiGCMModule extends KrollModule
             }
         } catch (Exception e) {
             Log.d(TAG, "Couldn't send fireError");
-            Log.d(TAG, "Couldn't send fireError");
-            Log.d(TAG, "Couldn't send fireError");
-            Log.d(TAG, "Couldn't send fireError");
-            Log.d(TAG, "Couldn't send fireError");
         }
     }
 
@@ -243,10 +251,6 @@ public class TiGCMModule extends KrollModule
                 Log.d(TAG, "onRegister was called");
             }
         } catch (Exception e) {
-            Log.d(TAG, "Couldn't send fireRegister");
-            Log.d(TAG, "Couldn't send fireRegister");
-            Log.d(TAG, "Couldn't send fireRegister");
-            Log.d(TAG, "Couldn't send fireRegister");
             Log.d(TAG, "Couldn't send fireRegister");
         }
     }
@@ -262,10 +266,6 @@ public class TiGCMModule extends KrollModule
                 Log.d(TAG, "onMessage was called");
             }
         } catch (Exception e) {
-            Log.d(TAG, "Couldn't send fireMessage");
-            Log.d(TAG, "Couldn't send fireMessage");
-            Log.d(TAG, "Couldn't send fireMessage");
-            Log.d(TAG, "Couldn't send fireMessage");
             Log.d(TAG, "Couldn't send fireMessage");
         }
     }
@@ -320,3 +320,4 @@ public class TiGCMModule extends KrollModule
     }
 
 }
+

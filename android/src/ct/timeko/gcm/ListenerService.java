@@ -18,7 +18,7 @@ public class ListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle rawData) {
         Log.d(TAG, "Received message from: " + from);
-        HashMap<String, Object> data = TiGCMModule.bundleToHashMap(rawData);
+        HashMap<String, Object> data = CttimekogcmModule.bundleToHashMap(rawData);
 
         boolean forceCreateNotification = false;
         if (data.containsKey("forceCreateNotification")) {
@@ -28,7 +28,7 @@ public class ListenerService extends GcmListenerService {
         }
 
         try {
-            TiGCMModule module = TiGCMModule.getInstance();
+            CttimekogcmModule module = CttimekogcmModule.getInstance();
             if(module != null && !forceCreateNotification) {
                 if(KrollRuntime.isInitialized() && TiApplication.isCurrentActivityInForeground()) {
                     module.fireMessage(data, true);
@@ -36,11 +36,7 @@ public class ListenerService extends GcmListenerService {
                 }
             }
         } catch (Exception e) {
-            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
-            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
-            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
-            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
-            Log.d(TAG, "Couldn't send fireMessage to TiGCMModule");
+            Log.d(TAG, "Couldn't send fireMessage to CttimekogcmModule");
         }
 
         NotificationPublisher.createNotification(this, data);

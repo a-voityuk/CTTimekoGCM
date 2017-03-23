@@ -19,15 +19,15 @@ public class RegistrationIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            String senderId = TiGCMModule.getInstance().gcmSenderId;
+            String senderId = CttimekogcmModule.getInstance().gcmSenderId;
             InstanceID instanceID = InstanceID.getInstance(this);
             String token = instanceID.getToken(senderId, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            Log.d(TAG, "GCM Registration Token: " + token);
-            TiGCMModule.getInstance().fireRegister(token);
+            Log.d(TAG, "GCM Registration Token: ");
+            CttimekogcmModule.getInstance().fireRegister(token);
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
             e.printStackTrace();
-            TiGCMModule.getInstance().fireError("Failed to complete token refresh");
+            CttimekogcmModule.getInstance().fireError("Failed to complete token refresh");
         }
     }
 }

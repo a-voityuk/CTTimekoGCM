@@ -1,6 +1,6 @@
-<project name="tigcm" default="dist">
+<project name="cttimekogcm" default="dist">
 	<description>
-		Ant build script for Titanium Android module CTTimekoGCM
+		Ant build script for Titanium Android module cttimekogcm
 	</description>
 
 	<property name="ti.module.root" location="${basedir}"/>

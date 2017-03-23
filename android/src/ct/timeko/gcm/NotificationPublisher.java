@@ -26,12 +26,10 @@ public class NotificationPublisher extends BroadcastReceiver {
     public static void createNotification(Context context, HashMap<String, Object> data) {
         int ntfId = id.getAndIncrement();
 
-        Log.d(TAG, "Creating notification");
-        
         Intent ntfIntent = new Intent(context, NotificationActivity.class);
         ntfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         ntfIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        ntfIntent.putExtra(TiGCMModule.NTF_KEY_DATA, data);
+        ntfIntent.putExtra(CttimekogcmModule.NTF_KEY_DATA, data);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, ntfId, ntfIntent, 0);
 
         int appIcon = 0;
@@ -60,9 +58,9 @@ public class NotificationPublisher extends BroadcastReceiver {
         // Text
         try {
             String payloadString = data.get("payload").toString();
-            HashMap<String, Object> payloadData = TiGCMModule.stringToHashMap(payloadString);
+            HashMap<String, Object> payloadData = CttimekogcmModule.stringToHashMap(payloadString);
             String payloadAndroidString = payloadData.get("android").toString();
-            HashMap<String, Object> payloadAndroidData = TiGCMModule.stringToHashMap(payloadAndroidString);
+            HashMap<String, Object> payloadAndroidData = CttimekogcmModule.stringToHashMap(payloadAndroidString);
 
         	String badgeString = payloadAndroidData.get("badge").toString();
         	String alert = payloadAndroidData.get("alert").toString();
@@ -70,8 +68,6 @@ public class NotificationPublisher extends BroadcastReceiver {
         	String userFullName = payloadData.get("userFullName").toString();
         	String type = payloadData.get("type").toString();
             String text = userFullName + ": " + alert;
-
-            Log.d(TAG, "badgeString = " + badgeString);
             
             if (type.equals("4")) {
                 String locale = context.getResources().getConfiguration().locale.getLanguage();
@@ -89,12 +85,10 @@ public class NotificationPublisher extends BroadcastReceiver {
 
             try {
             	badge = Integer.parseInt(badgeString);
-                Log.d(TAG, "badge parsed = " + badge);
             } catch (Exception e) {
                 Log.d(TAG, "Couldn't parse badge count");
             }
 
-            Log.d(TAG, "text = " + text);
             notificationBuilder.setContentText(text);
             notificationBuilder.setContentTitle(title);
             empty = false;
@@ -107,8 +101,7 @@ public class NotificationPublisher extends BroadcastReceiver {
             notificationManager.notify(ntfId, notificationBuilder.build());
             
             try {
-                Log.d(TAG, "badge = " + badge);
-                TiGCMModule.getInstance().updateBadgeCount(badge);
+                CttimekogcmModule.getInstance().updateBadgeCount(badge);
             } catch (Exception e) {
                 Log.d(TAG, "Couldn't set badge count");
             }
@@ -119,7 +112,7 @@ public class NotificationPublisher extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        HashMap data = (HashMap)intent.getSerializableExtra(TiGCMModule.NTF_KEY_DATA);
+        HashMap data = (HashMap)intent.getSerializableExtra(CttimekogcmModule.NTF_KEY_DATA);
 
         createNotification(context, data);
     }
