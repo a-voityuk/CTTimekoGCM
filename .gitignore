@@ -5,7 +5,6 @@ android/bin
 android/build
 .apt_generated
 .classpath
-build.properties
 .idea
 .project
 .settings
