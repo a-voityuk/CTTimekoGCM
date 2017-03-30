@@ -1,19 +1,10 @@
 # Titanium Android Notifications Module
 
+
 ## Description
 
 - Adds proper support for Google Cloud Messaging (GCM v2).
 - Makes your Android App show the count of unread messages as a badge on your App shortcut.
-
-## Usage
-
-Add the module to you project, the latest version of the module can be found inside the dist folder.
-
-**Example:**
-
-<modules>
-<module version="2.0.5">ct.timeko.gcm</module>
-</modules>
 
 
 ## Changes
@@ -23,6 +14,17 @@ Add the module to you project, the latest version of the module can be found ins
 
 **1.0**
 - Initial release
+
+
+## Usage
+
+Add the module to you project, the latest version of the module can be found inside the dist folder.
+
+```
+<modules>
+<module version="2.0.5">ct.timeko.gcm</module>
+</modules>
+```
 
 ## Usign the module in code
 
@@ -48,6 +50,7 @@ function onErrorCallback(e) {
   console.info("Push registration error: " + JSON.stringify(e));
 }
 ```
+
 
 ## License
 
