@@ -5,6 +5,7 @@
 - Adds proper support for Google Cloud Messaging (GCM v2).
 - Makes your Android App show the count of unread messages as a badge on your App shortcut.
 
+
 ## Usage
 
 Add the module to you project, the latest version of the module can be found inside the dist folder.
@@ -23,6 +24,11 @@ Add the module to you project, the latest version of the module can be found ins
 
 **1.0**
 - Initial release
+
+
+## Building the module
+
+In order to build this module you need `ant` and the proper SDK/NDK packages installed on your system. You also need to set up `build.properties` and a `.classpath` file in in the androd folder.
 
 
 ## Usign the module in code
@@ -44,9 +50,6 @@ function onMessageCallback(e) {
   console.info("Push message: " + e.data.payload);
 }
 
-function onErrorCallback(e) {
-  console.info("Push registration error: " + JSON.stringify(e));
-}
 
 ## License
 
