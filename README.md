@@ -22,7 +22,7 @@ Add the module to you project, the latest version of the module can be found ins
 
 ```
 <modules>
-<module version="2.0.5">ct.timeko.gcm</module>
+  <module version="2.0.5">ct.timeko.gcm</module>
 </modules>
 ```
 
